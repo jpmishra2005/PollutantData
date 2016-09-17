@@ -20,7 +20,7 @@ public class UserDao {
     return _sessionFactory.getCurrentSession();
   }
 
-  public void save(List<User> users) {
+  public void save(List<OldUser> users) {
 	  System.out.println("**********UserDao***********");
 	  for(int i=1;i<users.size();i++){
     getSession().save(users.get(i));}

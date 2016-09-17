@@ -69,7 +69,7 @@ public class UserController {
     return "User succesfully saved!";
   }*/
   @RequestMapping(value = "/save/", method = RequestMethod.POST,consumes = "application/json",produces="application/json")
-  public ResponseEntity<List<User>> createUser(@RequestBody List<User> users,UriComponentsBuilder ucBuilder) {
+  public ResponseEntity<List<OldUser>> createUser(@RequestBody List<OldUser> users,UriComponentsBuilder ucBuilder) {
 	 System.out.println("--------------->>>>>>>>>>Creating User ");
 	  //System.out.println("Creating User " + user.getName());
 
@@ -82,7 +82,7 @@ public class UserController {
 
       HttpHeaders headers = new HttpHeaders();
      // headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
-      return new ResponseEntity<List<User>>(users, HttpStatus.CREATED);
+      return new ResponseEntity<List<OldUser>>(users, HttpStatus.CREATED);
   }
 
   @RequestMapping(value = "/industry/{industryId}/station/{stationId}/data", method = RequestMethod.POST)
@@ -91,7 +91,7 @@ public class UserController {
 		//IndustryData industryData =new IndustryData();
 		//_CPCBDataUploadService.findIndustryData(industryId);
 		System.out.println("Device If *****" +industryData.getStationData().getDeviceId());
-		List<User> usrList=_CPCBDataUploadService.findByName(industryId);
+		List<User> usrList=_CPCBDataUploadService.findAll();
 		System.out.println("**********saveStationData********" +usrList.size());
 		for(int i=0;i<usrList.size();i++){
 			System.out.println("**********saveStationData********" +usrList.get(i).getEmail());

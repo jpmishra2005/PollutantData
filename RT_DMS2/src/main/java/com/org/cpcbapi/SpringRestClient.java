@@ -1,30 +1,20 @@
 package main.java.com.org.cpcbapi;
 
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.apache.commons.codec.binary.Base64;
-import org.aspectj.bridge.Message;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import main.java.com.org.cpcbapi.User;
- @Component
+@Component
 public class SpringRestClient  {
  
     public static final String REST_SERVICE_URI = "http://localhost:8081/RT_DMS2/user";
@@ -83,19 +73,19 @@ public class SpringRestClient  {
      * Send a POST request to create a new user.
      */
     @Async
-    public Future<Void> createUser() throws InterruptedException {
-        System.out.println("\nTesting create User API----------");
+    public static void createUser(List<User> userList) throws InterruptedException {
+        System.out.println("\nTesting create User API----------" +Thread.currentThread().getName());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         User user = new User();
-        List<User> userList=new ArrayList<User>();
-        for(int i=0;i<5;i++){
+       /* List<User> userList=new ArrayList<User>();
+        for(int i=0;i<3;i++){
         user.setEmail("jp3@gmail.com"+i);
         user.setName("jp3"+i);
         user.setId(i);
         userList.add(user);
          }
-    	//HttpEntity<Message> requestEntity = new HttpEntity<Message>(message, headers);
+    	*///HttpEntity<Message> requestEntity = new HttpEntity<Message>(message, headers);
         Long starttime= System.currentTimeMillis();
         HttpEntity<Object> request = new HttpEntity<Object>(userList, getHeaders());
         Long endtime= System.currentTimeMillis();
@@ -112,7 +102,7 @@ public class SpringRestClient  {
         //System.out.println(response.getBody().getName());
         System.out.println(res.getStatusCode());
         Thread.sleep(1000L);
-        return new AsyncResult<Void>(null);
+       // return new AsyncResult<Void>(null);
     }
  
   
@@ -149,7 +139,7 @@ public class SpringRestClient  {
     }
  */
 
-   /* public static void main(String args[]) throws Exception{
+  /* public static void main(String args[]) throws Exception{
         
     	//listAllUsers();
     	SpringRestClient sp=new SpringRestClient();
@@ -167,6 +157,7 @@ public class SpringRestClient  {
 
         deleteAllUsers();
         listAllUsers();
-    }*/
+    createUser();
+	   }*/
 
 }

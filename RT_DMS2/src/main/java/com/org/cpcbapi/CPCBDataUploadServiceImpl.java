@@ -21,9 +21,10 @@ public class CPCBDataUploadServiceImpl implements CPCBDataUploadService {
 	    	return industryIdList;
 	    }*/
 	    @Override
-	    public List<User> findByName(String name){
+	    public List<User> findAll(){
+	    	System.out.println(" ****CPCBDataUploadServiceImpl findByName ");
 	    	List<User> userList=new ArrayList<User>();
-	    	userList=repository.findByName(name);
+	    	userList=repository.findAll();
 	    	return userList;
 	    }
 }

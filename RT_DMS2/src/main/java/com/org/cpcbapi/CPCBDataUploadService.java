@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CPCBDataUploadService {
 	//public List<IndustryData> findIndustryData(String industryId);
-	public List<User> findByName(String name);
+	public List<User> findAll();
 }
