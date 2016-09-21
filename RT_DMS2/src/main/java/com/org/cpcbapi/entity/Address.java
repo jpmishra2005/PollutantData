@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -7,9 +7,9 @@ import javax.persistence.*;
 /**
  * The persistent class for the address database table.
  * 
- */
+ *//*
 @Entity
-@NamedQuery(name="Address.findAll", query="SELECT a FROM Address a")
+@NamedQuery(name="Address.findAll", query="SELECT a FROM Address a")*/
 public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;
 

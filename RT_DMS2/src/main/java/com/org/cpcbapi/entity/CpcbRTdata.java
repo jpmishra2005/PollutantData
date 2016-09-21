@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.entity;
 
 
 import org.springframework.data.annotation.Id;

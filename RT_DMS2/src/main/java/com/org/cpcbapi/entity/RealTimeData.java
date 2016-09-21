@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,9 +9,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
+/*
 @Entity
-@Table(name="Real_Time_Data")
+@Table(name="Real_Time_Data")*/
 public class RealTimeData {
 
   @Id

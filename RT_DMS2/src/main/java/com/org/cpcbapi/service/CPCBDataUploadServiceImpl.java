@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import main.java.com.org.cpcbapi.CPCBDataUploadService;
+import main.java.com.org.cpcbapi.dao.CPCBClientDataUploadRepository;
+import main.java.com.org.cpcbapi.entity.IndustryDeviceMap;
+import main.java.com.org.cpcbapi.entity.PollutantData;
+import main.java.com.org.cpcbapi.entity.User;
+import main.java.com.org.cpcbapi.service.CPCBDataUploadService;
 
 @Component(value="CPCBDataUploadServiceImpl")
 public class CPCBDataUploadServiceImpl implements CPCBDataUploadService {
@@ -21,10 +25,10 @@ public class CPCBDataUploadServiceImpl implements CPCBDataUploadService {
 	    	return industryIdList;
 	    }*/
 	    @Override
-	    public List<User> findAll(){
+	    public List<PollutantData> findAll(){
 	    	System.out.println(" ****CPCBDataUploadServiceImpl findByName ");
-	    	List<User> userList=new ArrayList<User>();
-	    	userList=repository.findAll();
-	    	return userList;
+	    	List<PollutantData> pollutantDataList=new ArrayList<PollutantData>();
+	    	pollutantDataList=repository.findAll();
+	    	return pollutantDataList;
 	    }
 }

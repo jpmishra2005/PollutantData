@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

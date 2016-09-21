@@ -1,8 +1,11 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.dao;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
+
+import main.java.com.org.cpcbapi.entity.OldUser;
+import main.java.com.org.cpcbapi.entity.User;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -48,7 +51,7 @@ public class UserDao {
     return (User) getSession().load(User.class, id);
   }
 
-  public void update(User user) {
+  public void update(OldUser user) {
     getSession().update(user);
     return;
   }

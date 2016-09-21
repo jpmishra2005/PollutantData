@@ -1,4 +1,4 @@
-package main.java.com.org.cpcbapi;
+package main.java.com.org.cpcbapi.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,8 +7,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity
-@Table(name="user")
+/*@Entity
+@Table(name="user")*/
 public class User {
 
   @Id
@@ -33,6 +33,11 @@ public class User {
     this.email = email;
     this.name = name;
   }
+  public User(int id,String email, String name) {
+	    this.email = email;
+	    this.name = name;
+	    this.id=id;
+	  }
 
   public long getId() {
     return id;
