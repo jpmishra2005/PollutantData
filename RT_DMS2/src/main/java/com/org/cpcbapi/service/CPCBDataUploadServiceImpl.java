@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import main.java.com.org.cpcbapi.DTO.Data;
 import main.java.com.org.cpcbapi.dao.CPCBClientDataUploadRepository;
 import main.java.com.org.cpcbapi.entity.IndustryDeviceMap;
 import main.java.com.org.cpcbapi.entity.PollutantData;
@@ -29,6 +30,14 @@ public class CPCBDataUploadServiceImpl implements CPCBDataUploadService {
 	    	System.out.println(" ****CPCBDataUploadServiceImpl findByName ");
 	    	List<PollutantData> pollutantDataList=new ArrayList<PollutantData>();
 	    	pollutantDataList=repository.findAll();
+	    	  /*for(PollutantData pdata:pollutantDataList){
+	       	   System.out.println("****" +pdata.toString());
+	           System.out.println("****" +pdata.getIndustryDeviceMap().getDeviceID());
+	       	   
+	       	   Data pollutedData=new Data(); 
+	           	pollutedData.setDeviceId(pdata.getIndustryDeviceMap().getDeviceID());
+	           	
+	    	  }*/
 	    	return pollutantDataList;
 	    }
 }

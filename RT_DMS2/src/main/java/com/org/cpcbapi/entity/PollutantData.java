@@ -44,7 +44,7 @@ public class PollutantData implements Serializable {
 	private int parameter;
 
 	//bi-directional many-to-one association to IndustryDeviceMap
-	@ManyToOne(targetEntity=IndustryDeviceMap.class, fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="Industry_Device_Map_ID")
 	private IndustryDeviceMap industryDeviceMap;
 
@@ -129,6 +129,17 @@ public class PollutantData implements Serializable {
 
 	public void setIndustryDeviceMap(IndustryDeviceMap industryDeviceMap) {
 		this.industryDeviceMap = industryDeviceMap;
+	}
+
+	@Override
+	public String toString() {
+		return "PollutantData [pollutantID=" + pollutantID
+				+ ", data_broadCast_frequency=" + data_broadCast_frequency
+				+ ", diagParamName=" + diagParamName + ", diagTimestamp="
+				+ diagTimestamp + ", diagValue=" + diagValue + ", flag=" + flag
+				+ ", measurementRange=" + measurementRange
+				+ ", measurement_Unit=" + measurement_Unit + ", parameter="
+				+ parameter + ", industryDeviceMap=" + industryDeviceMap + "]";
 	}
 
 }

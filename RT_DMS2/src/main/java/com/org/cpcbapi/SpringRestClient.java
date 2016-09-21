@@ -55,29 +55,29 @@ public class SpringRestClient  {
         List<Data> dataList=new ArrayList<Data>();
         
         System.out.println("============="+pollutantDataList.size());
-       for(PollutantData pdata:pollutantDataList){
-    	   System.out.println(pdata);
-        System.out.println(pdata.getIndustryDeviceMap());
+  //     for(PollutantData pdata:pollutantDataList)
+       for(int i=0;i<5;i++){
+    //	 System.out.println(pdata.toString());
     	   
     	   Data pollutedData=new Data(); 
-        	pollutedData.setDeviceId(pdata.getIndustryDeviceMap().getDeviceID());
+        	pollutedData.setDeviceId(pollutantDataList.get(i).getIndustryDeviceMap().getDeviceID());
         	
-        	if(pdata.getParameter()!=  0){
+        	if(pollutantDataList.get(i).getParameter()!=  0){
         		CPCBParams par=new CPCBParams();
-        		par.setParameter(pdata.getParameter());
-        		par.setFlag(pdata.getFlag());
+        		par.setParameter(pollutantDataList.get(i).getParameter());
+        		par.setFlag(pollutantDataList.get(i).getFlag());
         		par.setTimeStamp(new Date());
-        		par.setUnit(pdata.getMeasurement_Unit());
-        		par.setValue(pdata.getMeasurementRange());
+        		par.setUnit(pollutantDataList.get(i).getMeasurement_Unit());
+        		par.setValue(pollutantDataList.get(i).getMeasurementRange());
         		
         		
         		pollutedData.getParams().add(par);
         	}
         	else{
         		CPCBDiagnostics diag=new CPCBDiagnostics();
-        		diag.setDiagParam(pdata.getDiagParamName());
+        		diag.setDiagParam(pollutantDataList.get(i).getDiagParamName());
         		diag.setTimeStamp(new Date());
-        		diag.setValue(pdata.getDiagValue());
+        		diag.setValue(pollutantDataList.get(i).getDiagValue());
         		
         		pollutedData.getDiagnostics().add(diag);
         	}
@@ -85,8 +85,9 @@ public class SpringRestClient  {
         	dataList.add(pollutedData);
         }
         
+       
  System.out.println(dataList.toString());       
-      
+       
         /*Long starttime= System.currentTimeMillis();
         HttpEntity<Object> request = new HttpEntity<Object>(pollutantDataList, getHeaders());
         Long endtime= System.currentTimeMillis();

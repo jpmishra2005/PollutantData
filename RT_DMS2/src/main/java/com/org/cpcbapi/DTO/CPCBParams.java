@@ -11,17 +11,6 @@ import javax.persistence.Table;
 
 public class CPCBParams {
 
-	@Column(name="param_id")
-	private String paramId;
-	
-	@Column(name="industry_id")
-	private String industryId;
-	
-	@Column(name="station_id")
-	private String stationId;
-	
-	@Column(name="device_id")
-	private String deviceId;
 	
 	@Column(name="parameter")
 	private Integer parameter;
@@ -42,38 +31,7 @@ public class CPCBParams {
 		
 	}
 
-	public String getParamId() {
-		return paramId;
-	}
-
-	public void setParamId(String paramId) {
-		this.paramId = paramId;
-	}
-
-	public String getIndustryId() {
-		return industryId;
-	}
-
-	public void setIndustryId(String industryId) {
-		this.industryId = industryId;
-	}
-
-	public String getStationId() {
-		return stationId;
-	}
-
-	public void setStationId(String stationId) {
-		this.stationId = stationId;
-	}
-
-	public String getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
-
+	
 
 	public int getValue() {
 		return value;
@@ -117,12 +75,15 @@ public class CPCBParams {
 		this.parameter = parameter;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "CPCBParams [paramId=" + paramId + ", industryId=" + industryId
-				+ ", stationId=" + stationId + ", deviceId=" + deviceId
-				+ ", parameter=" + parameter + ", value=" + value + ", unit="
-				+ unit + ", timeStamp=" + timeStamp + ", flag=" + flag + "]";
+		return "CPCBParams [parameter=" + parameter + ", value=" + value
+				+ ", unit=" + unit + ", timeStamp=" + timeStamp + ", flag="
+				+ flag + "]";
 	}
+
+
 
 }

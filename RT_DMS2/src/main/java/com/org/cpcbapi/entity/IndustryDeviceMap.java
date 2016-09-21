@@ -27,7 +27,7 @@ public class IndustryDeviceMap implements Serializable {
 	private int stationID;
 
 	//bi-directional many-to-one association to PollutantData
-	@OneToMany(mappedBy="industryDeviceMap", fetch=FetchType.LAZY,orphanRemoval=false)
+	@OneToMany(mappedBy="industryDeviceMap", fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	private List<PollutantData> pollutantData;
 
 	public IndustryDeviceMap() {
@@ -85,6 +85,13 @@ public class IndustryDeviceMap implements Serializable {
 		pollutantData.setIndustryDeviceMap(null);
 
 		return pollutantData;
+	}
+
+	@Override
+	public String toString() {
+		return "IndustryDeviceMap [mappingID=" + mappingID + ", deviceID="
+				+ deviceID + ", industryID=" + industryID + ", stationID="
+				+ stationID + "]";
 	}
 
 }

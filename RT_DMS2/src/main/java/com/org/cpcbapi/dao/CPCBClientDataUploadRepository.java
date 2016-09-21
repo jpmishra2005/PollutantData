@@ -14,6 +14,6 @@ public interface CPCBClientDataUploadRepository extends CrudRepository<Pollutant
 	//List<IndustryData> findIndustryData(String industryId);
 	 // @Query("select u from mydb.student u where u.name like %?1")
 	
-	@Query(" from PollutantData as p inner join IndustryDeviceMap as i on p.industryDeviceMap=i.mappingID")
+//	@Query("select p from pollutant_data p inner join industry_device_map i where p.Industry_Device_Map_ID=i.mappingID")
 		List<PollutantData> findAll();
 }
