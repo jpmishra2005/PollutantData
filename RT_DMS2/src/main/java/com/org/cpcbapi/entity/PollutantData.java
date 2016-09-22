@@ -1,7 +1,11 @@
 package main.java.com.org.cpcbapi.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 
@@ -43,6 +47,7 @@ public class PollutantData implements Serializable {
 
 	private int parameter;
 
+	private int deviceID;
 	//bi-directional many-to-one association to IndustryDeviceMap
 	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="Industry_Device_Map_ID")
@@ -131,15 +136,12 @@ public class PollutantData implements Serializable {
 		this.industryDeviceMap = industryDeviceMap;
 	}
 
-	@Override
-	public String toString() {
-		return "PollutantData [pollutantID=" + pollutantID
-				+ ", data_broadCast_frequency=" + data_broadCast_frequency
-				+ ", diagParamName=" + diagParamName + ", diagTimestamp="
-				+ diagTimestamp + ", diagValue=" + diagValue + ", flag=" + flag
-				+ ", measurementRange=" + measurementRange
-				+ ", measurement_Unit=" + measurement_Unit + ", parameter="
-				+ parameter + ", industryDeviceMap=" + industryDeviceMap + "]";
+	public int getDeviceID() {
+		return this.deviceID;
+	}
+
+	public void setDeviceID(int deviceID) {
+		this.deviceID = deviceID;
 	}
 
 }

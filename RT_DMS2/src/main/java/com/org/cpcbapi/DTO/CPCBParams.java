@@ -1,5 +1,6 @@
 package main.java.com.org.cpcbapi.DTO;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-public class CPCBParams {
+public class CPCBParams implements Serializable{
 
 	
 	@Column(name="parameter")

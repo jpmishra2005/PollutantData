@@ -1,5 +1,6 @@
 package main.java.com.org.cpcbapi.DTO;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-public class CPCBDiagnostics {
+public class CPCBDiagnostics implements Serializable{
 
 	
 	
