@@ -2,7 +2,7 @@ package main.java.com.org.cpcbapi.dao;
 
 import java.util.List;
 
-import main.java.com.org.cpcbapi.entity.IndustryDeviceMap;
+import main.java.com.org.cpcbapi.entity.IndustryDeviceMap1;
 import main.java.com.org.cpcbapi.entity.PollutantData;
 import main.java.com.org.cpcbapi.entity.User;
 

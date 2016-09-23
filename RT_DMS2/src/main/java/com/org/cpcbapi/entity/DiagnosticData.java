@@ -1,34 +1,33 @@
-package main.java.com.org.cpcbapi.DTO;
+package main.java.com.org.cpcbapi.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Embeddable
+public class DiagnosticData {
 
-public class CPCBDiagnostics implements Serializable{
-
-	
-	
-	@Column(name="diag_param")
+	@Column(name = "diag_param")
 	private String diagParam;
-	
-	@Column(name="value")
-	private String value;
-	
-	@Column(name="time_stamp")
-	private Date timeStamp;
-	
-	public CPCBDiagnostics() {
-		
-	}
 
-	
+	@Column(name = "diag_value")
+	private String value;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "diag_time_stamp")
+	private Date timeStamp;
+
+	public DiagnosticData() {
+
+	}
 
 	public String getDiagParam() {
 		return diagParam;
@@ -56,9 +55,8 @@ public class CPCBDiagnostics implements Serializable{
 
 	@Override
 	public String toString() {
-		return "CPCBDiagnostics [+  diagParam="
-				+ diagParam + ", value=" + value + ", timeStamp=" + timeStamp
-				+ "]";
+		return "DiagnosticData [diagParam=" + diagParam + ", value=" + value
+				+ ", timeStamp=" + timeStamp + "]";
 	}
 
 

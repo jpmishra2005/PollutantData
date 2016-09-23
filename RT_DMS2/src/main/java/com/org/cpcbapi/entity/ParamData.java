@@ -1,38 +1,47 @@
-package main.java.com.org.cpcbapi.DTO;
+package main.java.com.org.cpcbapi.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class CPCBParams implements Serializable{
+@Embeddable
+public class ParamData {
 
-	
-	@Column(name="parameter")
-	private Integer parameter;
-	
-	@Column(name="value")
+	@Column(name = "parameter")
+	private String parameter;
+
+	@Column(name = "value")
 	private int value;
-	
-	@Column(name="unit")
+
+	@Column(name = "unit")
 	private String unit;
-	
-	@Column(name="time_stamp")
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "param_time_stamp")
 	private Date timeStamp;
-	
-	@Column(name="flag")
-	private String flag;
-	
-	public CPCBParams() {
-		
+
+	@Column(name = "flag")
+	private char flag;
+
+	public ParamData() {
+
 	}
 
-	
+	public String getParameter() {
+		return parameter;
+	}
+
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
+	}
 
 	public int getValue() {
 		return value;
@@ -51,7 +60,6 @@ public class CPCBParams implements Serializable{
 	}
 
 
-
 	public Date getTimeStamp() {
 		return timeStamp;
 	}
@@ -60,31 +68,21 @@ public class CPCBParams implements Serializable{
 		this.timeStamp = timeStamp;
 	}
 
-	public String getFlag() {
+	public char getFlag() {
 		return flag;
 	}
 
-	public void setFlag(String flag) {
+	public void setFlag(char flag) {
 		this.flag = flag;
 	}
 
-	public Integer getParameter() {
-		return parameter;
-	}
-
-	public void setParameter(Integer parameter) {
-		this.parameter = parameter;
-	}
-
-
-
 	@Override
 	public String toString() {
-		return "CPCBParams [parameter=" + parameter + ", value=" + value
+		return "ParamData [parameter=" + parameter + ", value=" + value
 				+ ", unit=" + unit + ", timeStamp=" + timeStamp + ", flag="
 				+ flag + "]";
 	}
 
-
+	
 
 }

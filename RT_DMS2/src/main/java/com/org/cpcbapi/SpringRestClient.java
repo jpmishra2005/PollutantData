@@ -7,13 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import main.java.com.org.cpcbapi.DTO.CPCBDiagnostics;
-import main.java.com.org.cpcbapi.DTO.CPCBParams;
 import main.java.com.org.cpcbapi.DTO.Data;
-import main.java.com.org.cpcbapi.entity.IndustryDeviceMap;
+import main.java.com.org.cpcbapi.entity.IndustryDeviceMap1;
+import main.java.com.org.cpcbapi.entity.IndustryStationDeviceMapping;
 import main.java.com.org.cpcbapi.entity.Params;
 import main.java.com.org.cpcbapi.entity.PollutantData;
 import main.java.com.org.cpcbapi.entity.User;
+import main.java.com.org.cpcbapi.keys.IndustryStationKey;
 
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
@@ -29,7 +29,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.mysql.fabric.xmlrpc.base.Array;
-
 
 @Component
 public class SpringRestClient {
@@ -50,289 +49,194 @@ public class SpringRestClient {
 		// headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add("Accept", "application/json");
 		headers.add("Content-Type", "application/json");
-		//headers.add("Authorization", "Basic " + base64Credentials);
+		headers.add("Authorization", "Basic " + base64Credentials);
 		// headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		return headers;
 	}
 
 	@Async
-	public static void createUser(List<PollutantData> pollutantDataList)
+	public static void saveStationData(List<PollutantData> pollutantDataList)
 			throws InterruptedException {
 		System.out.println("\nTesting create User API----------"
 				+ Thread.currentThread().getName());
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(
 				new MappingJackson2HttpMessageConverter());
-		Map<IndustryDeviceMap, List<Data>> dataListMap = new HashMap<IndustryDeviceMap, List<Data>>();
-		for(PollutantData pdata:pollutantDataList){
+		Map<IndustryStationKey, List<Data>> dataListMap = new HashMap<IndustryStationKey, List<Data>>();
+		for (PollutantData pdata : pollutantDataList) {
 
-			IndustryDeviceMap deviceMap=pdata.getIndustryDeviceMap();
+			IndustryStationKey indStKey = new IndustryStationKey();
+			// Creating the key
+			indStKey.setMappingID(pdata.getIndustryDeviceMap().getMappingID());
+			indStKey.setIndustryID(pdata.getIndustryDeviceMap().getIndustryID());
+			indStKey.setStationID(pdata.getIndustryDeviceMap().getStationID());
 
-			if(!dataListMap.containsKey(deviceMap)){
-				dataListMap.put(deviceMap, new ArrayList<Data>());
+			if (!dataListMap.containsKey(indStKey)) {
+				dataListMap.put(indStKey, new ArrayList<Data>());
 
 			}
 
+			List<Data> existingListData = dataListMap.get(indStKey);
 
-			List<Data> existingListData=dataListMap.get(deviceMap);
+			boolean deviceIDPreExistsCheck = false;
 
-			boolean deviceIDPreExistsCheck=false;
-
-			if(existingListData.contains(new Data(pdata.getDeviceID()))){
-				deviceIDPreExistsCheck=true;
+			if (existingListData.contains(new Data(pdata.getIndustryDeviceMap()
+					.getDeviceID()))) {
+				deviceIDPreExistsCheck = true;
 			}
 
+			if (!deviceIDPreExistsCheck) {
+				existingListData.add(new Data(pdata.getIndustryDeviceMap()
+						.getDeviceID()));
+			}
 
-			if(deviceIDPreExistsCheck){
-				for(Data d:existingListData){
-					if(d.getDeviceId()==pdata.getDeviceID()){
+			if (deviceIDPreExistsCheck) {
+				int deviceIndexInExistingList = existingListData
+						.indexOf(new Data(pdata.getIndustryDeviceMap()
+								.getDeviceID()));
 
-						if(pdata.getParameter()!=0){
-							CPCBParams par = new CPCBParams();
-							par.setParameter(pdata.getParameter());
-							par.setFlag(pdata.getFlag());
-							par.setTimeStamp(new Date());
-							par.setUnit(pdata.getMeasurement_Unit());
-							par.setValue(pdata.getMeasurementRange());
-							d.getParams().add(par);
-						}
-						else{
-							CPCBDiagnostics diag = new CPCBDiagnostics();
-							diag.setDiagParam(pdata.getDiagParamName());
-							diag.setTimeStamp(new Date());
-							diag.setValue(pdata.getDiagValue());
-							d.getDiagnostics().add(diag);
+				if (pdata.getParamData() != null) {
 
-						}
-					}
+					existingListData.get(deviceIndexInExistingList).getParams()
+							.add(pdata.getParamData());
+				}
+
+				if (pdata.getDiagData() != null) {
+
+					existingListData.get(deviceIndexInExistingList)
+							.getDiagnostics().add(pdata.getDiagData());
 				}
 			}
-			
-			else{
-				Data newDevice=new Data();
-				newDevice.setDeviceId(pdata.getDeviceID());
-				
-				if(pdata.getParameter()!=0){
-					CPCBParams par = new CPCBParams();
-					par.setParameter(pdata.getParameter());
-					par.setFlag(pdata.getFlag());
-					par.setTimeStamp(new Date());
-					par.setUnit(pdata.getMeasurement_Unit());
-					par.setValue(pdata.getMeasurementRange());
-					newDevice.getParams().add(par);
-				}
-				else{
-					CPCBDiagnostics diag = new CPCBDiagnostics();
-					diag.setDiagParam(pdata.getDiagParamName());
-					diag.setTimeStamp(new Date());
-					diag.setValue(pdata.getDiagValue());
-					newDevice.getDiagnostics().add(diag);
-
-				}
-				
-				existingListData.add(newDevice);
-			}
-
-
-
-
-
 
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		System.out.println("=============" + pollutantDataList.size());
-/*
-		// for(PollutantData pdata:pollutantDataList)
-		List<Data> pDataList=null;
-		IndustryDeviceMap preIdMap = null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		for (int i = 0; i < 100; i++) {
-
-			IndustryDeviceMap idMap=pollutantDataList.get(i).getIndustryDeviceMap();
-
-			if (!dataListMap.containsKey(idMap)) {
-
-				dataListMap.put(pollutantDataList.get(i)
-						.getIndustryDeviceMap(),new ArrayList<Data>());
-				if(pDataList !=null){
-					dataListMap.get(preIdMap).addAll(pDataList);
-				}
-				pDataList=new ArrayList<Data>();
-
-			}
-			Data indData = new Data();
-			indData.setDeviceId(pollutantDataList.get(i).getDeviceID());
-
-			if (pollutantDataList.get(i).getParameter() != 0) {
-				CPCBParams par = new CPCBParams();
-				par.setParameter(pollutantDataList.get(i).getParameter());
-				par.setFlag(pollutantDataList.get(i).getFlag());
-				par.setTimeStamp(new Date());
-				par.setUnit(pollutantDataList.get(i).getMeasurement_Unit());
-				par.setValue(pollutantDataList.get(i).getMeasurementRange());
-				indData.getParams().add(par);
-
-			} else {
-				CPCBDiagnostics diag = new CPCBDiagnostics();
-				diag.setDiagParam(pollutantDataList.get(i).getDiagParamName());
-				diag.setTimeStamp(new Date());
-				diag.setValue(pollutantDataList.get(i).getDiagValue());
-
-				indData.getDiagnostics().add(diag);
-			}
-			preIdMap=idMap;
-			pDataList.add(indData);
-
-
-
-		}*/
-		 Long starttime= System.currentTimeMillis();
-HttpEntity<Object> 	 request = null ;
-		 Long endtime= System.currentTimeMillis();
-		 System.out.println("Time it took for a lot of bla to execute: " +
-		 (endtime - starttime) / 1000.0 + " seconds.");
-	// System.out.println("Location : "+request.toString());
 		System.out.println(dataListMap.toString());
-		
-		
-		
-		Iterator<IndustryDeviceMap> it=dataListMap.keySet().iterator();
-		while(it.hasNext()){
-			IndustryDeviceMap deviceMap=it.next();
-			int indusID=deviceMap.getIndustryID();
-			int staID=deviceMap.getStationID();
-			List<Data> dataList1=dataListMap.get(deviceMap);
-			System.out.println(dataList1.toString());
-			
-			JSONArray json=new JSONArray(dataList1);
-			System.out.println(json.toString());
-			request= new HttpEntity<Object>(dataList1, getHeaders());
-			
-			System.out.println("helllooo");
-			try{
-				
-			    
-		        ResponseEntity<String> res = restTemplate.exchange(REST_SERVICE_URI+"/industry/"+indusID+"/station/"+staID+"/data",HttpMethod.POST,request,new ParameterizedTypeReference<String>() {});
 
-				
-				
-				
-				
-				System.out.println(res.getStatusCode());
-		        }
-		        catch(HttpClientErrorException e){ 
-		        	e.printStackTrace();
-		        	break;
-		        }
-		        }
-		}
-		 
-		
-		
-		
-		 
-		        	 /*
-		 * URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"/save/",
-		 * request, User.class);
-		 * System.out.println("Location : "+uri.toASCIIString());
-		 */
 		/*
-		 * ResponseEntity<List<User>> response =
-		 * restTemplate.postForEntity(REST_SERVICE_URI+"/1/save", request, new
-		 * ParameterizedTypeReference<List<User>>() {});
+		 * // for(PollutantData pdata:pollutantDataList) List<Data>
+		 * pDataList=null; IndustryDeviceMap preIdMap = null; for (int i = 0; i
+		 * < 100; i++) {
+		 * 
+		 * IndustryDeviceMap
+		 * idMap=pollutantDataList.get(i).getIndustryDeviceMap();
+		 * 
+		 * if (!dataListMap.containsKey(idMap)) {
+		 * 
+		 * dataListMap.put(pollutantDataList.get(i) .getIndustryDeviceMap(),new
+		 * ArrayList<Data>()); if(pDataList !=null){
+		 * dataListMap.get(preIdMap).addAll(pDataList); } pDataList=new
+		 * ArrayList<Data>();
+		 * 
+		 * } Data indData = new Data();
+		 * indData.setDeviceId(pollutantDataList.get(i).getDeviceID());
+		 * 
+		 * if (pollutantDataList.get(i).getParameter() != 0) { CPCBParams par =
+		 * new CPCBParams();
+		 * par.setParameter(pollutantDataList.get(i).getParameter());
+		 * par.setFlag(pollutantDataList.get(i).getFlag()); par.setTimeStamp(new
+		 * Date()); par.setUnit(pollutantDataList.get(i).getMeasurement_Unit());
+		 * par.setValue(pollutantDataList.get(i).getMeasurementRange());
+		 * indData.getParams().add(par);
+		 * 
+		 * } else { CPCBDiagnostics diag = new CPCBDiagnostics();
+		 * diag.setDiagParam(pollutantDataList.get(i).getDiagParamName());
+		 * diag.setTimeStamp(new Date());
+		 * diag.setValue(pollutantDataList.get(i).getDiagValue());
+		 * 
+		 * indData.getDiagnostics().add(diag); } preIdMap=idMap;
+		 * pDataList.add(indData);
+		 * 
+		 * 
+		 * 
+		 * }
 		 */
 
-		// ResponseEntity<List<User>> res =
-		// restTemplate.exchange(REST_SERVICE_URI+"/save/",HttpMethod.POST,request,new
-		// ParameterizedTypeReference<List<User>>() {});
-		// System.out.println(response.getBody().getEmail());
-		// System.out.println(response.getBody().getName());
-		// System.out.println(res.getStatusCode());
-		// Thread.sleep(1000L);
-		// return new AsyncResult<Void>(null);
-	//}
-
-	//@Async
-	/*public static void saveStationData(List<PollutantData> pollutantDataList)
-			throws InterruptedException {
 		Long starttime = System.currentTimeMillis();
-		HttpEntity<Object> request = new HttpEntity<Object>(pollutantDataList, getHeaders());
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getMessageConverters().add(
-				new MappingJackson2HttpMessageConverter());
-
-		System.out.println("\nTesting saveStationData API----------"
-				+ Thread.currentThread().getName());
+		HttpEntity<Object> request = null;
 		Long endtime = System.currentTimeMillis();
-		 try{
-		        ResponseEntity<IndustryData> response = restTemplate.postForEntity(REST_SERVICE_URI+"/industry/"+industryId+"/station/"+stationId+"/data", request,new ParameterizedTypeReference<List<Data>>() {});
-		        System.out.println(response.getStatusCode());
-		        }
-		        catch(HttpClientErrorException e){ 
-		        	System.out.println("**** HttpStatus error getStatusCode***" +e.getStatusCode());
-		        	System.out.println("**** HttpStatus error getResponseBodyAsString***" +e.getResponseBodyAsString());
-		        	 if(!e.getStatusCode().equals("200")){
-		        		 System.out.println("****HttpStatus not 200 ");
-		        		 ResponseEntity<IndustryData> response = restTemplate.postForEntity(REST_SERVICE_URI+"/industry/"+industryId+"/station/"+stationId+"/data", request, IndustryData.class);
-		        	        System.out.println("**** HttpStatus error *** "+response.getStatusCode());
-
-		        	 }
 		System.out.println("Time it took for a lot of bla to execute: "
-				+ (endtime - starttime) / 1000.0 + " seconds.");
-		        }
+				+ (endtime - starttime) / 1000.0 + " seconds."); //
+		System.out.println(dataListMap.toString());
+
+		Iterator<IndustryStationKey> it = dataListMap.keySet().iterator();
+		while (it.hasNext()) {
+			IndustryStationKey deviceMap = it.next();
+			int indusID = deviceMap.getIndustryID();
+			int staID = deviceMap.getStationID();
+			List<Data> uploadableDataList = dataListMap.get(deviceMap);
+			System.out.println(uploadableDataList.toString());
+
+			JSONArray json = new JSONArray(uploadableDataList);
+			System.out.println(json.toString());
+			request = new HttpEntity<Object>(uploadableDataList, getHeaders());
+			try {
+				ResponseEntity<String> res = restTemplate.exchange(
+						REST_SERVICE_URI + "/industry/" + indusID + "/station/"
+								+ staID + "/data", HttpMethod.POST, request,
+						new ParameterizedTypeReference<String>() {
+						});
+				System.out.println(res.getStatusCode());
+			} catch (HttpClientErrorException e) {
+				e.printStackTrace();
+				break;
+			}
+		}
 	}
 
+	/*
+	 * URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"/save/",
+	 * request, User.class);
+	 * System.out.println("Location : "+uri.toASCIIString());
+	 */
+	/*
+	 * ResponseEntity<List<User>> response =
+	 * restTemplate.postForEntity(REST_SERVICE_URI+"/1/save", request, new
+	 * ParameterizedTypeReference<List<User>>() {});
+	 */
+
+	// ResponseEntity<List<User>> res =
+	// restTemplate.exchange(REST_SERVICE_URI+"/save/",HttpMethod.POST,request,new
+	// ParameterizedTypeReference<List<User>>() {});
+	// System.out.println(response.getBody().getEmail());
+	// System.out.println(response.getBody().getName());
+	// System.out.println(res.getStatusCode());
+	// Thread.sleep(1000L);
+	// return new AsyncResult<Void>(null);
+	// }
+
+	// @Async
+	/*
+	 * public static void saveStationData(List<PollutantData> pollutantDataList)
+	 * throws InterruptedException { Long starttime =
+	 * System.currentTimeMillis(); HttpEntity<Object> request = new
+	 * HttpEntity<Object>(pollutantDataList, getHeaders()); RestTemplate
+	 * restTemplate = new RestTemplate();
+	 * restTemplate.getMessageConverters().add( new
+	 * MappingJackson2HttpMessageConverter());
+	 * 
+	 * System.out.println("\nTesting saveStationData API----------" +
+	 * Thread.currentThread().getName()); Long endtime =
+	 * System.currentTimeMillis(); try{ ResponseEntity<IndustryData> response =
+	 * restTemplate
+	 * .postForEntity(REST_SERVICE_URI+"/industry/"+industryId+"/station/"
+	 * +stationId+"/data", request,new ParameterizedTypeReference<List<Data>>()
+	 * {}); System.out.println(response.getStatusCode()); }
+	 * catch(HttpClientErrorException e){
+	 * System.out.println("**** HttpStatus error getStatusCode***"
+	 * +e.getStatusCode());
+	 * System.out.println("**** HttpStatus error getResponseBodyAsString***"
+	 * +e.getResponseBodyAsString()); if(!e.getStatusCode().equals("200")){
+	 * System.out.println("****HttpStatus not 200 ");
+	 * ResponseEntity<IndustryData> response =
+	 * restTemplate.postForEntity(REST_SERVICE_URI
+	 * +"/industry/"+industryId+"/station/"+stationId+"/data", request,
+	 * IndustryData.class);
+	 * System.out.println("**** HttpStatus error *** "+response
+	 * .getStatusCode());
+	 * 
+	 * } System.out.println("Time it took for a lot of bla to execute: " +
+	 * (endtime - starttime) / 1000.0 + " seconds."); } }
 	 */
 	@Async
 	public static void saveIndustryData(List<User> userList)

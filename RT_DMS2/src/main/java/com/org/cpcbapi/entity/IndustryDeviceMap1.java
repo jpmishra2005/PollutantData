@@ -11,51 +11,60 @@ import java.util.List;
  */
 @Entity
 @Table(name="industry_device_map")
-@NamedQuery(name="IndustryDeviceMap.findAll", query="SELECT i FROM IndustryDeviceMap i")
-public class IndustryDeviceMap implements Serializable {
+public class IndustryDeviceMap1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
-	private int mappingID;
+	private int mappingid;
 
+	@Column(nullable=false)
+	private int deviceid;
 
+	@Column(nullable=false)
+	private int industryid;
 
-	private int industryID;
-
-	private int stationID;
+	@Column(nullable=false)
+	private int stationid;
 
 	//bi-directional many-to-one association to PollutantData
-	@OneToMany(mappedBy="industryDeviceMap",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="industryDeviceMap")
 	private List<PollutantData> pollutantData;
 
-	public IndustryDeviceMap() {
+	public IndustryDeviceMap1() {
 	}
 
-	public int getMappingID() {
-		return this.mappingID;
+	public int getMappingid() {
+		return this.mappingid;
 	}
 
-	public void setMappingID(int mappingID) {
-		this.mappingID = mappingID;
+	public void setMappingid(int mappingid) {
+		this.mappingid = mappingid;
 	}
 
-	
-	public int getIndustryID() {
-		return this.industryID;
+	public int getDeviceid() {
+		return this.deviceid;
 	}
 
-	public void setIndustryID(int industryID) {
-		this.industryID = industryID;
+	public void setDeviceid(int deviceid) {
+		this.deviceid = deviceid;
 	}
 
-	public int getStationID() {
-		return this.stationID;
+	public int getIndustryid() {
+		return this.industryid;
 	}
 
-	public void setStationID(int stationID) {
-		this.stationID = stationID;
+	public void setIndustryid(int industryid) {
+		this.industryid = industryid;
+	}
+
+	public int getStationid() {
+		return this.stationid;
+	}
+
+	public void setStationid(int stationid) {
+		this.stationid = stationid;
 	}
 
 	public List<PollutantData> getPollutantData() {
@@ -66,25 +75,18 @@ public class IndustryDeviceMap implements Serializable {
 		this.pollutantData = pollutantData;
 	}
 
-	public PollutantData addPollutantData(PollutantData pollutantData) {
+/*	public PollutantData addPollutantData(PollutantData pollutantData) {
 		getPollutantData().add(pollutantData);
 		pollutantData.setIndustryDeviceMap(this);
 
 		return pollutantData;
 	}
-
+*/
 	public PollutantData removePollutantData(PollutantData pollutantData) {
 		getPollutantData().remove(pollutantData);
 		pollutantData.setIndustryDeviceMap(null);
 
 		return pollutantData;
 	}
-
-	@Override
-	public String toString() {
-		return "IndustryDeviceMap [mappingID=" + mappingID + ", industryID="
-				+ industryID + ", stationID=" + stationID + "]";
-	}
-	
 
 }

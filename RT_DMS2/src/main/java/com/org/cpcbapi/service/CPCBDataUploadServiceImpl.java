@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import main.java.com.org.cpcbapi.DTO.Data;
 import main.java.com.org.cpcbapi.dao.CPCBClientDataUploadRepository;
-import main.java.com.org.cpcbapi.entity.IndustryDeviceMap;
+import main.java.com.org.cpcbapi.entity.IndustryDeviceMap1;
 import main.java.com.org.cpcbapi.entity.PollutantData;
 import main.java.com.org.cpcbapi.entity.User;
 import main.java.com.org.cpcbapi.service.CPCBDataUploadService;

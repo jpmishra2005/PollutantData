@@ -8,140 +8,79 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-
 /**
  * The persistent class for the pollutant_data database table.
  * 
  */
 @Entity
-@Table(name="pollutant_data")
-@NamedQuery(name="PollutantData.findAll", query="SELECT p FROM PollutantData p")
+@Table(name = "pollutant_data")
+@NamedQuery(name = "PollutantData.findAll", query = "SELECT p FROM PollutantData p")
 public class PollutantData implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(unique=true, nullable=false)
-	private int pollutantID;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true, nullable = false)
+	private int pollutantDataID;
 
-	private int data_broadCast_frequency;
+	
+	@Embedded
+	private ParamData paramData;
+	@Embedded
+	private DiagnosticData diagData;
 
-	@Column(name="diag_param_name", length=45)
-	private String diagParamName;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="diag_timestamp")
-	private Date diagTimestamp;
-
-	@Column(name="diag_value", length=45)
-	private String diagValue;
-
-	@Column(length=1)
-	private String flag;
-
-	@Column(name="measurement_range")
-	private int measurementRange;
-
-	@Column(length=45)
-	private String measurement_Unit;
-
-	private int parameter;
-
-	private int deviceID;
-	//bi-directional many-to-one association to IndustryDeviceMap
-	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
-	@JoinColumn(name="Industry_Device_Map_ID")
-	private IndustryDeviceMap industryDeviceMap;
+	// bi-directional many-to-one association to IndustryDeviceMap
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "Industry_Device_Map_ID")
+	private IndustryStationDeviceMapping industryDeviceMap;
 
 	public PollutantData() {
 	}
 
-	public int getPollutantID() {
-		return this.pollutantID;
+	public int getPollutantDataID() {
+		return pollutantDataID;
 	}
 
-	public void setPollutantID(int pollutantID) {
-		this.pollutantID = pollutantID;
+	public void setPollutantDataID(int pollutantDataID) {
+		this.pollutantDataID = pollutantDataID;
+	}
+	public ParamData getParamData() {
+		return paramData;
 	}
 
-	public int getData_broadCast_frequency() {
-		return this.data_broadCast_frequency;
+	public void setParamData(ParamData paramData) {
+		this.paramData = paramData;
 	}
 
-	public void setData_broadCast_frequency(int data_broadCast_frequency) {
-		this.data_broadCast_frequency = data_broadCast_frequency;
+	public DiagnosticData getDiagData() {
+		return diagData;
 	}
 
-	public String getDiagParamName() {
-		return this.diagParamName;
+	public void setDiagData(DiagnosticData diagData) {
+		this.diagData = diagData;
 	}
 
-	public void setDiagParamName(String diagParamName) {
-		this.diagParamName = diagParamName;
+	public IndustryStationDeviceMapping getIndustryDeviceMap() {
+		return industryDeviceMap;
 	}
 
-	public Date getDiagTimestamp() {
-		return this.diagTimestamp;
-	}
-
-	public void setDiagTimestamp(Date diagTimestamp) {
-		this.diagTimestamp = diagTimestamp;
-	}
-
-	public String getDiagValue() {
-		return this.diagValue;
-	}
-
-	public void setDiagValue(String diagValue) {
-		this.diagValue = diagValue;
-	}
-
-	public String getFlag() {
-		return this.flag;
-	}
-
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
-
-	public int getMeasurementRange() {
-		return this.measurementRange;
-	}
-
-	public void setMeasurementRange(int measurementRange) {
-		this.measurementRange = measurementRange;
-	}
-
-	public String getMeasurement_Unit() {
-		return this.measurement_Unit;
-	}
-
-	public void setMeasurement_Unit(String measurement_Unit) {
-		this.measurement_Unit = measurement_Unit;
-	}
-
-	public int getParameter() {
-		return this.parameter;
-	}
-
-	public void setParameter(int parameter) {
-		this.parameter = parameter;
-	}
-
-	public IndustryDeviceMap getIndustryDeviceMap() {
-		return this.industryDeviceMap;
-	}
-
-	public void setIndustryDeviceMap(IndustryDeviceMap industryDeviceMap) {
+	public void setIndustryDeviceMap(IndustryStationDeviceMapping industryDeviceMap) {
 		this.industryDeviceMap = industryDeviceMap;
 	}
 
-	public int getDeviceID() {
-		return this.deviceID;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
-	public void setDeviceID(int deviceID) {
-		this.deviceID = deviceID;
+	@Override
+	public String toString() {
+		return "PollutantData [pollutantDataID=" + pollutantDataID
+				+ ", paramData=" + paramData + ", diagData=" + diagData
+				+ ", industryDeviceMap=" + industryDeviceMap + "]";
 	}
+
+
+
+
+
 
 }
