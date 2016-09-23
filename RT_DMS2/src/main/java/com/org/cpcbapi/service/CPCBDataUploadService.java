@@ -13,4 +13,5 @@ import org.springframework.stereotype.Service;
 public interface CPCBDataUploadService {
 	//public List<IndustryData> findIndustryData(String industryId);
 	public List<PollutantData> findAll();
+	public void saveFailuerData(PollutantData pollutantData);
 }

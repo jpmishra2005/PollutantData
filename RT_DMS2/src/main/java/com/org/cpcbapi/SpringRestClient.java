@@ -1,5 +1,6 @@
 package main.java.com.org.cpcbapi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,15 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.com.org.cpcbapi.DTO.Data;
+import main.java.com.org.cpcbapi.entity.FailedPollutantData;
 import main.java.com.org.cpcbapi.entity.IndustryDeviceMap1;
 import main.java.com.org.cpcbapi.entity.IndustryStationDeviceMapping;
 import main.java.com.org.cpcbapi.entity.Params;
 import main.java.com.org.cpcbapi.entity.PollutantData;
 import main.java.com.org.cpcbapi.entity.User;
 import main.java.com.org.cpcbapi.keys.IndustryStationKey;
+import main.java.com.org.cpcbapi.service.CPCBDataUploadService;
 
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +30,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.mysql.fabric.xmlrpc.base.Array;
@@ -34,6 +39,9 @@ import com.mysql.fabric.xmlrpc.base.Array;
 public class SpringRestClient {
 
 	public static final String REST_SERVICE_URI = "http://localhost:8080/api/v1.0";
+
+	@Autowired
+	private static CPCBDataUploadService _CPCBDataUploadService;
 
 	/*
 	 * Add HTTP Authorization header, using Basic-Authentication to send
@@ -170,16 +178,57 @@ public class SpringRestClient {
 			JSONArray json = new JSONArray(uploadableDataList);
 			System.out.println(json.toString());
 			request = new HttpEntity<Object>(uploadableDataList, getHeaders());
+			System.out.println(" REUEST---> " + request.toString());
 			try {
 				ResponseEntity<String> res = restTemplate.exchange(
 						REST_SERVICE_URI + "/industry/" + indusID + "/station/"
 								+ staID + "/data", HttpMethod.POST, request,
 						new ParameterizedTypeReference<String>() {
 						});
+			
 				System.out.println(res.getStatusCode());
+			} catch (ResourceAccessException e) {
+				System.out.println(e);
+				System.out.println("**** HttpStatus error getStatusCode***"
+						+ e.getRootCause());
+				System.out
+						.println("**** HttpStatus error getResponseBodyAsString***"
+								+ e.getMessage());
+
+				//No point of doing this
+				/*IndustryStationDeviceMapping failedIndustryDeviceMap = new IndustryStationDeviceMapping();
+				List<FailedPollutantData> failedPollutantDataList = new ArrayList<FailedPollutantData>();
+
+				for (Data failedData : uploadableDataList) {
+					FailedPollutantData failedPollutantData = new FailedPollutantData();
+					failedIndustryDeviceMap.setDeviceID(indusID);
+					failedIndustryDeviceMap.setStationID(staID);
+					failedIndustryDeviceMap.setDeviceID(failedData.getDeviceId());
+					failedPollutantData.setIndustryDeviceMap(failedIndustryDeviceMap);
+					failedPollutantData.setDiagData(failedData.getDiagnostics());
+					failedPollutantData.setParamData(failedData.getParams());
+				}*/
+
 			} catch (HttpClientErrorException e) {
-				e.printStackTrace();
-				break;
+
+				System.out.println("**** HttpStatus error getStatusCode***"
+						+ e.getStatusCode());
+				System.out
+						.println("**** HttpStatus error getResponseBodyAsString***"
+								+ e.getResponseBodyAsString());
+				if (!e.getStatusCode().equals("200")) {
+					System.out.println("****HttpStatus not 200 ");
+					// _CPCBDataUploadService.saveFailuerData();
+
+					IndustryStationDeviceMapping failedIndustryDeviceMap = new IndustryStationDeviceMapping();
+
+					failedIndustryDeviceMap.setDeviceID(indusID);
+					failedIndustryDeviceMap.setStationID(staID);
+					failedIndustryDeviceMap.setDeviceID(uploadableDataList.get(
+							0).getDeviceId());
+					// failedPollutantData.setIndustryDeviceMap(failedIndustryDeviceMap);
+					// failedPollutantData.
+				}
 			}
 		}
 	}

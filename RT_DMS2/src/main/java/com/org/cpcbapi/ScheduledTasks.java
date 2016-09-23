@@ -27,7 +27,7 @@ public class ScheduledTasks {
 	@Autowired
 	private CPCBDataUploadService _CPCBDataUploadService;
 
-	@Scheduled(fixedRate = 500000)
+	@Scheduled(fixedRate = 10000)
 	public void databaseIndustryHook() throws Exception {
 		log.info("The time is now {}", dateFormat.format(new Date()));
 		List<PollutantData> pollutantDataList=_CPCBDataUploadService.findAll();

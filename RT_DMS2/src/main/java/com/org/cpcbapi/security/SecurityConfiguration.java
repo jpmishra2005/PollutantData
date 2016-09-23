@@ -8,8 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+/*@EnableWebSecurity*/
+public class SecurityConfiguration /*extends WebSecurityConfigurerAdapter*/ {
 
 	private static String REALM="MY_TEST_REALM";
 	
@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 }*/
 //@Configuration
 //public class SimpleSecurityConfig extends WebSecurityConfigurerAdapter{
-	@Override
+	/*@Override*/
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 		 .csrf().disable()

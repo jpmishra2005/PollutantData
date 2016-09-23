@@ -19,25 +19,17 @@ public class CPCBDataUploadServiceImpl implements CPCBDataUploadService {
 	 @Autowired
 	    private CPCBClientDataUploadRepository repository;
 
-	   /* @Override
-	    public List<IndustryData> findIndustryData(String industryId){
-	    	List<IndustryData> industryIdList=new ArrayList<IndustryData>();
-	    	industryIdList=repository.findIndustryData(industryId);
-	    	return industryIdList;
-	    }*/
 	    @Override
 	    public List<PollutantData> findAll(){
 	    	System.out.println(" ****CPCBDataUploadServiceImpl findByName ");
 	    	List<PollutantData> pollutantDataList=new ArrayList<PollutantData>();
 	    	pollutantDataList=repository.findAll();
-	    	  /*for(PollutantData pdata:pollutantDataList){
-	       	   System.out.println("****" +pdata.toString());
-	           System.out.println("****" +pdata.getIndustryDeviceMap().getDeviceID());
-	       	   
-	       	   Data pollutedData=new Data(); 
-	           	pollutedData.setDeviceId(pdata.getIndustryDeviceMap().getDeviceID());
-	           	
-	    	  }*/
-	    	return pollutantDataList;
+	       	return pollutantDataList;
+	    }
+	    @Override
+	    public void saveFailuerData(PollutantData pollutantData){
+	    	System.out.println(" ****CPCBDataUploadServiceImpl Failure Data ");
+	    	//PollutantData pollutantData=new PollutantData();
+	    	repository.save(pollutantData);
 	    }
 }
